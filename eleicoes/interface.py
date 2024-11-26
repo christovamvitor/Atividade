@@ -8,10 +8,9 @@ class UrnaEletronica:
     def __init__(self, root):
         self.root = root
         self.root.title("Urna Eletrônica")
-        self.root.configure(background='#ffffff')
+        self.root.configure(background='#00008B')
         self.root.geometry("780x430")
-        self.root.resizable(True, True)
-        self.root.minsize(width=400, height=300)
+        self.root.resizable(False, False)
 
         self.urna = None
         self.candidatos = []
@@ -34,7 +33,7 @@ class UrnaEletronica:
             messagebox.showerror("Erro", f"Falha ao carregar os dados: {e}")
 
     def interface(self):
-        self.urna_frame = Frame(self.root, bd=4, bg='#D3D3D3', highlightbackground='#759fe6', highlightthickness=3)
+        self.urna_frame = Frame(self.root, bd=4, bg='#D3D3D3', highlightbackground='#A9A9A9', highlightthickness=3)
         self.urna_frame.place(relx=0.05, rely=0.05, relwidth=0.9, relheight=0.9)
 
         self.urna_info = Frame(self.urna_frame, bd=4, bg='#ffffff')
@@ -43,13 +42,13 @@ class UrnaEletronica:
         self.urna_teclado = Frame(self.urna_frame, bd=4, bg='#1C1C1C')
         self.urna_teclado.place(relx=0.55, rely=0.05, relwidth=0.43, relheight=0.9)
 
-        self.display = Entry(self.urna_info, font=("Helvetica", 18), justify="center", bg="black", fg="white", insertbackground="white")
+        self.display = Entry(self.urna_info, font=("Helvetica", 18), justify="center", bg="#ffffff", fg="#000000", insertbackground="#000000", highlightbackground='#000000', highlightthickness=1)
         self.display.pack(pady=10)
 
-        self.text_label = Label(self.urna_info, text="Informe o título do eleitor", font=("Helvetica", 12), bg="#ffffff", fg="black")
+        self.text_label = Label(self.urna_info, text="Informe o título do eleitor", font=("Helvetica", 12), bg="#ffffff", fg="#000000")
         self.text_label.pack(pady=10)
 
-        self.cand_label = Label(self.urna_info, text="", font=("Helvetica", 12), bg="#ffffff", fg="white", wraplength=200, justify="center")
+        self.cand_label = Label(self.urna_info, text="", font=("Helvetica", 12), bg="#ffffff", fg="#ffffff", wraplength=200, justify="center")
         self.cand_label.pack(pady=10)
 
         self.teclado()
@@ -65,10 +64,28 @@ class UrnaEletronica:
         ]
 
         for texto, linha, coluna in botoes:
-            Button(self.urna_teclado, text=texto, font=("Arial", 10, "bold"), bg="#000000", fg="#FFFFFF",
+            Button(self.urna_teclado, text=texto, font=("Arial", 14, "bold"), bg="#000000", fg="#FFFFFF",
                 command=lambda t=texto: self.add_to_display(t)).place(
                 relx=0.05 + coluna * 0.3, rely=0.1 + linha * 0.15, relwidth=0.25, relheight=0.1
             )
+    
+
+    def botoes(self):
+        Button(self.urna_teclado, text='BRANCO', font=("Arial", 12, "bold"), bg='#ffffff', fg='black',
+            command=lambda: self.voto_especial('BRANCO')).place(relx=0.02, rely=0.7, relwidth=0.29, relheight=0.1)
+        
+        Button(self.urna_teclado, text='CORRIGE', font=("Arial", 12, "bold"), bg='#FF4500', fg='black',
+            command=self.corrige).place(relx=0.34, rely=0.7, relwidth=0.29, relheight=0.1)
+        
+        Button(self.urna_teclado, text='CONFIRMA', font=("Arial", 12, "bold"), bg='#3CB371', fg='black',
+            command=self.confirmar).place(relx=0.66, rely=0.7, relwidth=0.33, relheight=0.1) # alterar altura do botao
+
+        Button(self.urna_teclado, text='LISTAR ELEITORES', font=("Arial", 10, "bold"), bg='#1E90FF', fg='black',
+            command=self.listar_eleitores).place(relx=0.02, rely=0.82, relwidth=0.96, relheight=0.08)
+
+        Button(self.urna_teclado, text='SELECIONAR ELEITOR', font=("Arial", 10, "bold"), bg='#FFFF00', fg='black',
+            command=self.buscar_eleitor).place(relx=0.02, rely=0.91, relwidth=0.96, relheight=0.08)
+
 
     def listar_eleitores(self):
         if not self.eleitores:
@@ -105,21 +122,6 @@ class UrnaEletronica:
             messagebox.showerror("Erro", "Eleitor não encontrado.")
         self.display.delete(0, END)
 
-    def botoes(self):
-        Button(self.urna_teclado, text='BRANCO', font=("Arial", 12, "bold"), bg='#ffffff', fg='black',
-            command=lambda: self.voto_especial('BRANCO')).place(relx=0.02, rely=0.7, relwidth=0.29, relheight=0.1)
-        
-        Button(self.urna_teclado, text='CORRIGE', font=("Arial", 12, "bold"), bg='#FF4500', fg='black',
-            command=self.corrige).place(relx=0.34, rely=0.7, relwidth=0.29, relheight=0.1)
-        
-        Button(self.urna_teclado, text='CONFIRMA', font=("Arial", 12, "bold"), bg='#3CB371', fg='black',
-            command=self.confirmar).place(relx=0.66, rely=0.7, relwidth=0.33, relheight=0.1) # alterar altura do botao
-
-        Button(self.urna_teclado, text='LISTAR ELEITORES', font=("Arial", 10, "bold"), bg='#1E90FF', fg='black',
-            command=self.listar_eleitores).place(relx=0.02, rely=0.82, relwidth=0.96, relheight=0.08)
-
-        Button(self.urna_teclado, text='SELECIONAR ELEITOR', font=("Arial", 10, "bold"), bg='#FFFF00', fg='black',
-            command=self.buscar_eleitor).place(relx=0.02, rely=0.91, relwidth=0.96, relheight=0.08)
     
     def add_to_display(self, value):
         self.display.insert(END, value)
