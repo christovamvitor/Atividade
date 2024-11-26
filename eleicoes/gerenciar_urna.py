@@ -2,6 +2,7 @@ from common import *
 from eleicao import Urna
 
 def iniciar_urna(eleitores, candidatos):
+    print("==============")
     print("Iniciando Urna")
     print("==============")
     secao = int(input("Número da secao: "))
